@@ -3,12 +3,20 @@ import * as admin from 'firebase-admin';
 // Environment config: https://medium.com/firelayer/deploying-environment-variables-with-firebase-cloud-functions-680779413484
 import { config } from './config';
 
+import { newGroupEmail } from './emails';
+
 admin.initializeApp();
 
 const db = admin.firestore();
 
 export const helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info("Hello logs!", { structuredData: true });
+  newGroupEmail('gabi89.m@gmail.com', {}).then(() => {
+    functions.logger.info("Email sent");
+  })
+  .catch((error: any) => {
+    functions.logger.error(error, { structuredData: true });
+  });
+
   response.send("Hello from Firebase! " + config.sendgrid.api_key);
 });
 

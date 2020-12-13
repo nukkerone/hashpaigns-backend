@@ -6,13 +6,13 @@ sgMail.setApiKey(config.sendgrid.api_key);
 export const newGroupEmail = (to: string, data: any): Promise<any> => {
   const msg = {
     to: to, // Change to your recipient
-    from: 'nukker_1@hotmail.com', // Change to your verified sender
-    subject: 'Sending with SendGrid is Fun',
-    template_id: 'd-ca23c5004781424a92c35fcf2ae31a9e',
+    from: config.sendgrid.email_from, // Change to your verified sender
+    subject: 'New group created',
+    template_id: config.sendgrid.group_created_template_id,
     dynamic_template_data: data,
     asm: { // Unsubscribe group
-      group_id: 18884,
-      groups_to_display: [18884]
+      group_id: parseInt(config.sendgrid.group_id),
+      groups_to_display: [parseInt(config.sendgrid.group_id)]
     }
   }
   return sgMail.send(msg);
